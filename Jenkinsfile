@@ -27,7 +27,7 @@ pipeline {
         stage('Construire l’image Docker') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:${VERSION}")
+                    docker.build("${DOCKER_IMAGE}:${VERSION}", "--build-arg USER=${USER} .")
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
         stage('Pousser l’image sur Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-creds') {
+                    docker.withRegistry('', 'docker-hub-credentials') {
                         sh "docker tag ${DOCKER_IMAGE}:${VERSION} ${DOCKER_IMAGE}:latest"
                         sh "docker push ${DOCKER_IMAGE}:${VERSION}"
                         sh "docker push ${DOCKER_IMAGE}:latest"
