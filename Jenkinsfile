@@ -27,7 +27,8 @@ pipeline {
         stage('Construire l’image Docker') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:${VERSION}", "--build-arg USER=${USER} .")
+                    def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
+                    docker.build("${DOCKER_IMAGE}:${VERSION}", "--build-arg USER=${buildUser} .")
                 }
             }
         }
