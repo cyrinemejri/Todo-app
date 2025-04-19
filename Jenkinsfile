@@ -25,18 +25,27 @@ pipeline {
         }
 
         stage('Construire l’image Docker') {
-            agent {
+          // Utilise un conteneur Docker client qui monte le socket du host
+              agent {
                 docker {
-                  image 'docker:20.10-dind'   
-                  args  '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                  image 'docker:20.10' 
+                  args  '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
                 }
               }
-            steps {
+              steps {
                 script {
-                    def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
-                    docker.build("${DOCKER_IMAGE}:${VERSION}", "--build-arg USER=${buildUser} .")
+                  // Récupère le user du shell (ex. "jenkins")
+                  def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
+        
+                  // Build de l’image avec --build-arg USER=<jenkins>
+                  sh """
+                    docker build \
+                      --build-arg USER=${buildUser} \
+                      -t ${DOCKER_IMAGE}:${VERSION} \
+                      .
+                  """
                 }
-            }
+              }
         }
 
         stage('Se connecter à Docker Hub') {
