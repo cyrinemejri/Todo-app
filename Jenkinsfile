@@ -25,6 +25,12 @@ pipeline {
         }
 
         stage('Construire l’image Docker') {
+            agent {
+                docker {
+                  image 'docker:20.10-dind'   
+                  args  '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+              }
             steps {
                 script {
                     def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
