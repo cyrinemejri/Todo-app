@@ -26,12 +26,6 @@ pipeline {
 
         stage('Construire l’image Docker') {
           // Utilise un conteneur Docker client qui monte le socket du host
-              agent {
-                docker {
-                  image 'docker:20.10' 
-                  args  '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
-                }
-              }
               steps {
                 script {
                   // Récupère le user du shell (ex. "jenkins")
