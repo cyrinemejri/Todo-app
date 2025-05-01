@@ -29,12 +29,11 @@ pipeline {
               steps {
                 script {
                   // Récupère le user du shell (ex. "jenkins")
-                  def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
+                  //def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
         
                   // Build de l’image avec --build-arg USER=<jenkins>
                   sh """
                     docker build \
-                      --build-arg USER=${buildUser} \
                       -t ${DOCKER_IMAGE}:${VERSION} \
                       .
                   """
