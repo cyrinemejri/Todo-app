@@ -68,16 +68,13 @@ pipeline {
         }
 
         stage('Déployer sur Kubernetes') {
-            steps {
-                withKubeConfig([
-                     credentialsId: 'minikube-kubeconfig',  // The credential ID you set
-                     serverUrl: 'https://127.0.0.1:8443'  // Minikube API server URL
-            ]) {
-            sh 'kubectl apply -f k8s/deployment.yaml'
-            sh 'kubectl apply -f k8s/service.yaml'
-        }
-    }
-        }
+               steps {
+                   script {
+                       sh 'kubectl apply -f deployment.yaml'
+                       sh 'kubectl apply -f service.yaml'
+                   }
+               }
+           }
     }
 
     post {
