@@ -67,20 +67,16 @@ pipeline {
             }
         }
 
-        stage('Install kubectl') {
-            steps {
-                sh '''
-                curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                chmod +x kubectl
-                '''
-            }
-        }
-
         stage('Déployer sur Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
-            }
+                withKubeConfig([
+                     credentialsId: 'minikube-kubeconfig',  // The credential ID you set
+                     serverUrl: 'https://127.0.0.1:8443'  // Minikube API server URL
+            ]) {
+            sh 'kubectl apply -f k8s/deployment.yaml'
+            sh 'kubectl apply -f k8s/service.yaml'
+        }
+    }
         }
     }
 
