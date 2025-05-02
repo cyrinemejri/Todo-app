@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "cyrinemejri/todo-app"
+        DOCKER_IMAGE = "nassimayadi/todo-app"
         VERSION = "${new Date().format('yyyyMMdd-HHmm')}"
     }
 
