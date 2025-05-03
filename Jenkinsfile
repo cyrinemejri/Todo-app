@@ -73,8 +73,8 @@ pipeline {
         stage('Déployer sur Kubernetes') {
                steps {
                    script {
-                       bat 'kubectl apply -f deployment.yaml'
-                       bat 'kubectl apply -f service.yaml'
+                       bat 'kubectl apply -f ../k8s/deployment.yaml'
+                       bat 'kubectl apply -f ../k8s/service.yaml'
                    }
                }
            }
