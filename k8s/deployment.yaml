@@ -13,7 +13,7 @@ spec:
         app: mon-app
     spec:
       containers:
-        - name: TodoApp
-          image: cyrinemejri/todo-app
+        - name: todo-app
+          image: nassimayadi/todo-app
           ports:
             - containerPort: 80
