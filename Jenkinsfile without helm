@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = "nassimayadi/todo-app"
         VERSION = "${new Date().format('yyyyMMdd-HHmm')}"
-        CHART_PATH = "helm/todo-app"
     }
 
     tools {
@@ -75,7 +74,8 @@ pipeline {
                steps {
                    script {
                        withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-                       helm upgrade --install todo-app $HELM_CHART_PATH
+                       bat 'kubectl apply -f k8s/deployment.yaml'
+                       bat 'kubectl apply -f k8s/service.yaml'
                        }
                    }
                }
