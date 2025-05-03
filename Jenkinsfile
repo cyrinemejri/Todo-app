@@ -14,13 +14,13 @@ pipeline {
 
         stage('Build Maven') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 
         stage('Exécuter les tests') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
                   //def buildUser = sh(script: 'echo $USER', returnStdout: true).trim()
         
                   // Build de l’image avec --build-arg USER=<jenkins>
-                  sh """
+                  bat """
                     docker build \
                       -t ${DOCKER_IMAGE}:${VERSION} \
                       .
@@ -50,7 +50,7 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    bat "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                 }
             }
         }
@@ -59,9 +59,9 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', 'docker-hub-credentials') {
-                        sh "docker tag ${DOCKER_IMAGE}:${VERSION} ${DOCKER_IMAGE}:latest"
-                        sh "docker push ${DOCKER_IMAGE}:${VERSION}"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        bat "docker tag ${DOCKER_IMAGE}:${VERSION} ${DOCKER_IMAGE}:latest"
+                        bat "docker push ${DOCKER_IMAGE}:${VERSION}"
+                        bat "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
@@ -70,8 +70,8 @@ pipeline {
         stage('Déployer sur Kubernetes') {
                steps {
                    script {
-                       sh 'kubectl apply -f deployment.yaml'
-                       sh 'kubectl apply -f service.yaml'
+                       bat 'kubectl apply -f deployment.yaml'
+                       bat 'kubectl apply -f service.yaml'
                    }
                }
            }
